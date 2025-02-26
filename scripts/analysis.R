@@ -67,6 +67,25 @@ aov_SR #results of anova test
 aov_TA <- aov(TA ~ Macrophyte_Type, data = data_new)
 aov_TA
 
+### Understanding the statistical significance
 report(aov_SR)
 report(aov_TA)
+
+### Running TukeyHSD for statistically significant variables
+TukeyHSD(aov_SR)
+plot(TukeyHSD(aov_SR), las=1)  # Horizontal labels for readability
+
+### What comment can I put here?
+tukey_results <- TukeyHSD(aov_SR)
+tukey_df <- as.data.frame(tukey_results$Macrophyte_Type)
+tukey_df$Comparison <- rownames(tukey_df)  
+
+ggplot(tukey_df, aes(y=Comparison, x=diff, xmin=lwr, xmax=upr)) +
+  geom_point(size=3, color="purple") +  # Mean difference
+  geom_errorbarh(height=0.2, color="black") +  # Horizontal error bars
+  geom_vline(xintercept=0, linetype="dashed", color="red") +  # Reference line at 0
+  labs(title="Tukey HSD Post-Hoc Test for Species Richness",
+       x="Mean Difference (95% CI)",
+       y="Macrophyte Type Comparison")
+
 

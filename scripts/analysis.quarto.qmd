@@ -8,7 +8,7 @@ editor: visual
 
 Introduce data
 
-## Running Code
+## Reading In and Understanding Data 
 
 I will be installing packages "readr" and "report".
 
@@ -76,18 +76,79 @@ data_new <- data_new %>%
 
 ## **Data Analysis**
 
-something about plots
+I now want to understand what the data looks like in graph format. Using a package in 'tidyverse' called 'ggplot'. The use of the data_new (which still has NA values) in this plot will come up with a warning. Running these lines of code should generate a bar graph. You can also change the colors of the graph if these colors do not suit you. This bar graph shows the species richness by macrophyte type.
 
 ```{r}
 ggplot(data_new, aes(x=Macrophyte_Type, y=SR, fill=Macrophyte_Type)) +
   geom_bar(stat="identity") +
   labs(title="Species Richness by Macrophyte Type", x= "Macrophyte Type", y= "Species Richness") +
   scale_fill_manual(values = c("Amphibolis" = "lightpink", "Ecklonia" = "lightblue", "Sargassum" = "lightgreen"))
-  
+
 ```
 
-THis is for guthub read.me file
+This next plot shows a boxplot with the outliers removed. Again, the colors are able to be changed. 'ylim( , )' shows the limits of the y-axis. This can be changed to include the outliers.
 
-What repo is for - assignmnet for this course this is what you will find in this repo used this data license?
+```{r}
+ggplot(data_new, aes(x=Macrophyte_Type, y=TA, fill=Macrophyte_Type)) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x= "Macrophyte Type", y= "Total Abundance") +
+  ylim(0,60) +
+  scale_fill_manual(values = c("Amphibolis" = "lightpink", "Ecklonia" = "lightblue", "Sargassum"="lightgreen"))
+```
 
-what different variables are? put link to my binder
+This next plot is comparing Amphipod data by Macrophyte Type.
+
+```{r}
+ggplot(data_new, aes(x=Macrophyte_Type, y=Amphipod, fill=Macrophyte_Type)) +
+  geom_bar(stat="identity") +
+  labs( title= "Amphipod Count against Macrophyte Type", x= "Macrophyte Type", y= "Amphipod Count") +
+  scale_fill_manual (values= c("Amphibolis" ="lightpink", "Ecklonia" = "lightblue", "Sargassum"="lightgreen"))
+```
+
+## Statistical Analysis
+
+In order to back up the claims of the plots. I ran an ANOVA and a TukeyHSD (for those significant variables). First the ANOVA. I ran an ANOVA for SR = Species Richness and TA = Total Abundance.
+
+```{r}
+aov_SR <- aov(SR ~ Macrophyte_Type, data = data_new)
+aov_SR #results of anova test
+
+aov_TA <- aov(TA ~ Macrophyte_Type, data = data_new)
+aov_TA
+```
+
+In order to understand the statistical significance I used the 'report()' package. This helps to understand which variable I needed to run a TukeyHSD on. If you run these, you will see in R Console that SR shows a statistical significance while TA does not. This means that I need to run a TukeyHSD on SR.
+
+```{r}
+report(aov_SR)
+report(aov_TA)
+```
+
+Below is the code chunk for running the TukeyHSD for SR.
+
+```{r}
+TukeyHSD(aov_SR)
+plot(TukeyHSD(aov_SR), las=1)  # Horizontal labels for readability
+```
+
+Making a data.frame or something . still understanding this shit
+
+```{r}
+tukey_results <- TukeyHSD(aov_SR)
+tukey_df <- as.data.frame(tukey_results$Macrophyte_Type)
+tukey_df$Comparison <- rownames(tukey_df) 
+```
+
+I wanted to create a visual representation of the TukeyHSD. See the code below. I stole this from chatcpt.
+
+```{r}
+ggplot(tukey_df, aes(y=Comparison, x=diff, xmin=lwr, xmax=upr)) +
+  geom_point(size=3, color="purple") +  # Mean difference
+  geom_errorbarh(height=0.2, color="black") +  # Horizontal error bars
+  geom_vline(xintercept=0, linetype="dashed", color="red") +  # Reference line at 0
+  labs(title="Tukey HSD Post-Hoc Test for Species Richness",
+       x="Mean Difference (95% CI)",
+       y="Macrophyte Type Comparison")
+```
+
+Now that is all the stuff I have done to understand this data set.

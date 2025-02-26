@@ -1,0 +1,93 @@
+---
+title: "analysis.quarto"
+format: html
+editor: visual
+---
+
+## Introduction
+
+Introduce data
+
+## Running Code
+
+I will be installing packages "readr" and "report".
+
+```{r}
+install.packages("readr")
+install.packages("report")
+```
+
+I will then be reading in these packages using library(readr), library(tidyverse) and library(report).
+
+```{r}
+library(readr)
+library(tidyverse)
+library(report)
+```
+
+The next step is to read in the data set using the read.csv() function. Following this I wanted to view the raw data set named 'data' by typing in 'view(data)'. In the R console, the raw data set, which we have just called 'data' will show.
+
+```{r}
+data <- read.csv("raw_data_species_richness_total_abundance.csv")
+view(data)
+```
+
+I want to investigate the structure of the data set by using the 'str(data)' function next. If you run this line of code, the output in R console will show that the data is a 'data.frame', there are 23 observations ('obs.') of 23 variables. 'data.frame' shows the macrophyte types and the data collected on various invertebrate data collected. Observations indicate whether the variables in the 'data.frame' are characters or numerical (numbers) and the 'variables' indicate how many data points are in the each 'data.frame'.
+
+To understand what the first 6 lines ('head(data)') and the last 6 lines ('tail(data)') are, you run this function. This allows us to see which data points have NA values.
+
+```{r}
+str(data)
+head(data)
+tail(data)
+```
+
+I then want to assign a new name to the data set so I can work on a cleaner data set. As we saw when running the last line of code, the last two rows do not have data in them. This new data set named 'data_new', also removes these last two rows without the data in them. Typically you would only run this line of code once otherwise R will continue to remove rows with values in it. We then want to view this 'data_new' to see if R did take out the last two rows that had no data in it. You will then see the 'data_new' show up in the environment tap in the top right corner. In comparison to just 'data', we can see that 2 observations have been taken out. R has done what we wanted it to do
+
+```{r}
+data_new <- data[-c(22,23),] #to only be run once
+view(data_new)
+```
+
+If we wanted to remove all data points with NA values, we would run this line of code, creating an even cleaner data set. Notice how it also shows in your Environment with only 13 obs.
+
+```{r}
+data_clean <- na.omit(data_new)
+view(data_clean)
+```
+
+For easier readability and understanding, I changed the column names, to the full names of the organisms collected. 'SR' = Species Richness and 'TA' = Total Abundance
+
+```{r}
+colnames(data_new) <- c("Macrophyte_Type", "Amphipod", "Isopod", "Shrimp","Caprellid", "Copepod", "Tanaid", "Polychaete_Motile", "Hermit_Crab", "Sea_Spider", "Anemone", "Sea_Cucumber", 'Brittle_Star', "Feather_Hydroid", "Urchin", "Gastropod", "Fanworm", "Polychaetes_Sessile", "Ascidian_Colonial", "Fish","SR", "TA", "SW_Index")
+
+```
+
+Similarly for the Macrophyte Types. I changed their names to the full names. 'Sarg' = Sargassum, 'Eck' = Ecklonia and 'Amph' = Amphibolis.
+
+```{r}
+data_new <- data_new %>%
+  mutate(Macrophyte_Type = case_when (
+    str_detect(Macrophyte_Type, "Sarg") ~ "Sargassum",
+    str_detect(Macrophyte_Type, "Eck") ~ "Ecklonia",
+    str_detect(Macrophyte_Type, "Amph") ~ "Amphibolis",
+  ))
+```
+
+## **Data Analysis**
+
+something about plots
+
+```{r}
+ggplot(data_new, aes(x=Macrophyte_Type, y=SR, fill=Macrophyte_Type)) +
+  geom_bar(stat="identity") +
+  labs(title="Species Richness by Macrophyte Type", x= "Macrophyte Type", y= "Species Richness") +
+  scale_fill_manual(values = c("Amphibolis" = "lightpink", "Ecklonia" = "lightblue", "Sargassum" = "lightgreen"))
+  
+```
+
+THis is for guthub read.me file
+
+What repo is for - assignmnet for this course this is what you will find in this repo used this data license?
+
+what different variables are? put link to my binder

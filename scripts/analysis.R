@@ -40,10 +40,10 @@ data_new <- data_new %>%
 
 # Data Analysis:
 
-ggplot(data_new, aes(x=Macrophyte_Type, y=SR)) +
+ggplot(data_new, aes(x=Macrophyte_Type, y=SR, fill=Macrophyte_Type)) +
   geom_bar(stat="identity") +
   labs(title="Species Richness by Macrophyte Type", x= "Macrophyte Type", y= "Species Richness") +
-  theme_minimal()
+  scale_fill_manual(values = c("Amphibolis" = "lightpink", "Ecklonia" = "lightblue", "Sargassum" = "lightgreen"))
   
 
 ### Boxplot without outliers

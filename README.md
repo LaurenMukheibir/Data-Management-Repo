@@ -8,3 +8,5 @@ In the scripts folder, my code is stored on 'analysis.r' and my markdown is call
 The rest of the items in the 'scripts' folder are plots created from my code. 
 I will not need any licenses as I collected and counted this data myself.
 
+Binder
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/LaurenMukheibir/Data-Management-Repo/HEAD)

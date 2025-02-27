@@ -75,10 +75,11 @@ report(aov_TA)
 TukeyHSD(aov_SR)
 plot(TukeyHSD(aov_SR), las=1)  # Horizontal labels for readability
 
-### What comment can I put here?
+### Post-Hoc Test
 tukey_results <- TukeyHSD(aov_SR)
 tukey_df <- as.data.frame(tukey_results$Macrophyte_Type)
 tukey_df$Comparison <- rownames(tukey_df)  
+view(tukey_df)
 
 ggplot(tukey_df, aes(y=Comparison, x=diff, xmin=lwr, xmax=upr)) +
   geom_point(size=3, color="purple") +  # Mean difference

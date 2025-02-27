@@ -6,18 +6,18 @@ editor: visual
 
 ## Introduction
 
-Introduce data
+I will be using data on marine invertebrates collected from Western Australia. Second year students and I counted and sorted this data to create a data set. Data on various marine invertebrates from different macrophyte types were collected. There were three different types of macrophyte's used in this research, Saragassum, Ecklonia and Amphibolis. The invertebrates identified were amphipod, isopod, shrimp, caprellid, copepod, tanaid, polychaete (motile and sessile), hermit crab, sea spider, anemone, sea cucumber, brittle star, feather hydroid, urchin, gastropod, fanworm, ascidian colonial and fish. Included in this data set are species richness (SR) and Total Abundance (TA). This data will be used in an assignment for an honours module called Data Management. The aim of this is to understand and practice how to make data/research more accessible and reproducible while learning how to create a GitHub repository.
 
 ## Reading In and Understanding Data 
 
-I will be installing packages "readr" and "report".
+I will be installing packages `readr` and `report`.
 
 ```{r}
 install.packages("readr")
 install.packages("report")
 ```
 
-I will then be reading in these packages using library(readr), library(tidyverse) and library(report).
+I will then be reading in these packages using `library(readr)`, `library(tidyverse)` and `library(report)`.
 
 ```{r}
 library(readr)
@@ -25,16 +25,16 @@ library(tidyverse)
 library(report)
 ```
 
-The next step is to read in the data set using the read.csv() function. Following this I wanted to view the raw data set named 'data' by typing in 'view(data)'. In the R console, the raw data set, which we have just called 'data' will show.
+The next step is to read in the data set using the `read.csv( )` function. Following this I wanted to view the raw data set named 'data' by typing in `view(data)`. In the R console, the raw data set, which we have just called 'data' will show.
 
 ```{r}
 data <- read.csv("raw_data_species_richness_total_abundance.csv")
 view(data)
 ```
 
-I want to investigate the structure of the data set by using the 'str(data)' function next. If you run this line of code, the output in R console will show that the data is a 'data.frame', there are 23 observations ('obs.') of 23 variables. 'data.frame' shows the macrophyte types and the data collected on various invertebrate data collected. Observations indicate whether the variables in the 'data.frame' are characters or numerical (numbers) and the 'variables' indicate how many data points are in the each 'data.frame'.
+I want to investigate the structure of the data set by using the `str(data)` function next. If you run this line of code, the output in R console will show that the data is a `data.frame`, there are 23 observations (`obs.`) of 23 variables. `data.frame` shows the macrophyte types and the data collected from the different macrophyte types (e.g. Sargassum, Ecklonia and Amphibolis) . Observations (`obs`) indicate the number of rows, representing individual data points in the `data.frame`. Variables refer to the number of columns, representing different measured attributes. These variables can be numerical or categorical, as displayed when you run `view(data)`.
 
-To understand what the first 6 lines ('head(data)') and the last 6 lines ('tail(data)') are, you run this function. This allows us to see which data points have NA values.
+To understand what the first 6 lines (`head(data)`) and the last 6 lines (`tail(data)`) are, you run this function. This allows us to see which variables have NA values.
 
 ```{r}
 str(data)
@@ -42,7 +42,7 @@ head(data)
 tail(data)
 ```
 
-I then want to assign a new name to the data set so I can work on a cleaner data set. As we saw when running the last line of code, the last two rows do not have data in them. This new data set named 'data_new', also removes these last two rows without the data in them. Typically you would only run this line of code once otherwise R will continue to remove rows with values in it. We then want to view this 'data_new' to see if R did take out the last two rows that had no data in it. You will then see the 'data_new' show up in the environment tap in the top right corner. In comparison to just 'data', we can see that 2 observations have been taken out. R has done what we wanted it to do
+I then want to assign a new name to the data set so I can work on a cleaner data set. As we saw when running the last line of code, the last two rows do not have data in them. This new data set named `data_new`, also removes these last two rows with the NA values in them. Typically you would only run this line of code once otherwise R will continue to remove rows with values in it. We then want to view this `data_new` to see if R did take out the last two rows that had no data in it. You will then see the `data_new` show up in the environment tap in the top right corner. In comparison to just `data`, we can see that 2 observations have been taken out. R has done what we wanted it to do
 
 ```{r}
 data_new <- data[-c(22,23),] #to only be run once
@@ -56,14 +56,14 @@ data_clean <- na.omit(data_new)
 view(data_clean)
 ```
 
-For easier readability and understanding, I changed the column names, to the full names of the organisms collected. 'SR' = Species Richness and 'TA' = Total Abundance
+For easier readability and understanding, I changed the column names, to the full names of the organisms collected. 'SR' = Species Richness and 'TA' = Total Abundance.
 
 ```{r}
 colnames(data_new) <- c("Macrophyte_Type", "Amphipod", "Isopod", "Shrimp","Caprellid", "Copepod", "Tanaid", "Polychaete_Motile", "Hermit_Crab", "Sea_Spider", "Anemone", "Sea_Cucumber", 'Brittle_Star', "Feather_Hydroid", "Urchin", "Gastropod", "Fanworm", "Polychaetes_Sessile", "Ascidian_Colonial", "Fish","SR", "TA", "SW_Index")
 
 ```
 
-Similarly for the Macrophyte Types. I changed their names to the full names. 'Sarg' = Sargassum, 'Eck' = Ecklonia and 'Amph' = Amphibolis.
+Similarly for the macrophyte types, I changed their names to the full names. 'Sarg' = Sargassum, 'Eck' = Ecklonia and 'Amph' = Amphibolis.
 
 ```{r}
 data_new <- data_new %>%
@@ -76,7 +76,7 @@ data_new <- data_new %>%
 
 ## **Data Analysis**
 
-I now want to understand what the data looks like in graph format. Using a package in 'tidyverse' called 'ggplot'. The use of the data_new (which still has NA values) in this plot will come up with a warning. Running these lines of code should generate a bar graph. You can also change the colors of the graph if these colors do not suit you. This bar graph shows the species richness by macrophyte type.
+I now want to understand what the data looks like in graph format. Using a package in `tidyverse` called `ggplot2`. Running these lines of code should generate a bar graph. The use of the `data_new` (which still has NA values) in this plot will come up with a warning. If we wanted to use a data set without NA values, we could use the `data_clean` instead. You can also change the colors of the graph if these colors do not suit you. This bar graph shows the species richness by macrophyte type.
 
 ```{r}
 ggplot(data_new, aes(x=Macrophyte_Type, y=SR, fill=Macrophyte_Type)) +
@@ -86,7 +86,7 @@ ggplot(data_new, aes(x=Macrophyte_Type, y=SR, fill=Macrophyte_Type)) +
 
 ```
 
-This next plot shows a boxplot with the outliers removed. Again, the colors are able to be changed. 'ylim( , )' shows the limits of the y-axis. This can be changed to include the outliers.
+This next plot shows a box plot with the outliers removed. Again, the colors are able to be changed. `ylim( , )` shows the limits of the y-axis. This can be changed to include the outliers.
 
 ```{r}
 ggplot(data_new, aes(x=Macrophyte_Type, y=TA, fill=Macrophyte_Type)) +
@@ -96,7 +96,7 @@ ggplot(data_new, aes(x=Macrophyte_Type, y=TA, fill=Macrophyte_Type)) +
   scale_fill_manual(values = c("Amphibolis" = "lightpink", "Ecklonia" = "lightblue", "Sargassum"="lightgreen"))
 ```
 
-This next plot is comparing Amphipod data by Macrophyte Type.
+This next plot is comparing amphipod data by macrophyte type.
 
 ```{r}
 ggplot(data_new, aes(x=Macrophyte_Type, y=Amphipod, fill=Macrophyte_Type)) +
@@ -107,7 +107,7 @@ ggplot(data_new, aes(x=Macrophyte_Type, y=Amphipod, fill=Macrophyte_Type)) +
 
 ## Statistical Analysis
 
-In order to back up the claims of the plots. I ran an ANOVA and a TukeyHSD (for those significant variables). First the ANOVA. I ran an ANOVA for SR = Species Richness and TA = Total Abundance.
+In order to back up the claims of the plots. I ran an ANOVA and a `TukeyHSD( )` (for those significant variables). First the ANOVA. I ran an ANOVA for SR = Species Richness and TA = Total Abundance. I used the `aov( )` function.
 
 ```{r}
 aov_SR <- aov(SR ~ Macrophyte_Type, data = data_new)
@@ -117,29 +117,30 @@ aov_TA <- aov(TA ~ Macrophyte_Type, data = data_new)
 aov_TA
 ```
 
-In order to understand the statistical significance I used the 'report()' package. This helps to understand which variable I needed to run a TukeyHSD on. If you run these, you will see in R Console that SR shows a statistical significance while TA does not. This means that I need to run a TukeyHSD on SR.
+In order to understand the statistical significance I used the `report( )` package. This helps to understand which variable I needed to run a `TukeyHSD( )` on. If you run these, you will see in R Console that SR shows a statistical significance while TA does not. This means that I need to run a `TukeyHSD( )` on SR.
 
 ```{r}
 report(aov_SR)
 report(aov_TA)
 ```
 
-Below is the code chunk for running the TukeyHSD for SR.
+Below is the code chunk for running the `TukeyHSD( )` for SR.
 
 ```{r}
 TukeyHSD(aov_SR)
 plot(TukeyHSD(aov_SR), las=1)  # Horizontal labels for readability
 ```
 
-Making a data.frame or something . still understanding this shit
+I want to make a new data frame for the TukeyHSD results. The code below executes this. `tukey_results` stores the results of the `TukeyHSD(aov_SR)`. The next line of code converts the results to a data frame making it easier to visualize and manipulate. The last line adds comparison labels. `rownames(tukey_df)`: Gets the **row names** (which contain the **group comparisons**, e.g., `"Ecklonia - Amphibolis"`). I then want to view these results by running `view(tukey_df)`.
 
 ```{r}
 tukey_results <- TukeyHSD(aov_SR)
 tukey_df <- as.data.frame(tukey_results$Macrophyte_Type)
 tukey_df$Comparison <- rownames(tukey_df) 
+view(tukey_df)
 ```
 
-I wanted to create a visual representation of the TukeyHSD. See the code below. I stole this from chatcpt.
+I wanted to create a visual representation of the TukeyHSD. See the code below.
 
 ```{r}
 ggplot(tukey_df, aes(y=Comparison, x=diff, xmin=lwr, xmax=upr)) +
@@ -151,4 +152,4 @@ ggplot(tukey_df, aes(y=Comparison, x=diff, xmin=lwr, xmax=upr)) +
        y="Macrophyte Type Comparison")
 ```
 
-Now that is all the stuff I have done to understand this data set.
+And now we should have a easily reproducible code!
